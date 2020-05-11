@@ -55,9 +55,9 @@ namespace vfBattleTechMod_Core.Mods.BaseImpl
 
         private void InitialiseLogging(string directory)
         {
-            Logger = new log4NetLogger(Name);
-            //Logger = new HbsLogger(GetHbsLogger(), Directory, Name);
-            Logger.Debug($"Initialized logging for [{Name}]");
+            //Logger = new log4NetLogger(Name);
+            Logger = new HbsLogger(GetHbsLogger(), Directory, Name);
+            //Logger.Debug($"Initialized logging for [{Name}]");
         }
 
         private void Initialize(HarmonyInstance harmonyInstance, string settings)

@@ -43,9 +43,6 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\BATTLETECH\BattleTech_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\..\XLRP-Complete\vfCore\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\BATTLETECH\BattleTech_Data\Managed\Newtonsoft.Json.dll</HintPath>
@@ -85,15 +82,11 @@
     <Compile Include="Utils\Enums\LogLevel.cs" />
     <Compile Include="Utils\Interfaces\ILogger.cs" />
     <Compile Include="Utils\Loggers\HbsLogger.cs" />
-    <Compile Include="Utils\Loggers\log4NetLogger.cs" />
     <Compile Include="Utils\Loggers\NullLogger.cs" />
     <Compile Include="Utils\MetaDataHelpers\MechModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
