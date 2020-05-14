@@ -13,9 +13,9 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
     {
         public static List<StoreItem> LoadStoreItemsFromExcel(string sourceExcelFilePath,
             List<ProcGenStoreContentFeatureSettings.RarityBracket> rarityBrackets,
-            List<BattleTechResourceType> validStoreTypes, ILogger logger)
+            List<BattleTechResourceType> validStoreTypes)
         {
-            logger.Debug($"Loading store item definitions from [{sourceExcelFilePath}]...");
+            vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug($"Loading store item definitions from [{sourceExcelFilePath}]...");
 
             var storeItems = new List<StoreItem>();
             var package = new ExcelPackage(new FileInfo(sourceExcelFilePath));
@@ -53,19 +53,19 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                     worksheet.Name == battleTechResourceType.ToString());
                 if (sheet == null)
                 {
-                    logger.Debug(
+                     vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug(
                         $"Failed to find sheet linked to BattleTechResourceType [{battleTechResourceType.ToString()}]");
                     continue;
                 }
 
                 if (sheet.Dimension.Rows <= 1)
                 {
-                    logger.Debug(
+                     vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug(
                         $"No items defined in sheet linked to BattleTechResourceType [{battleTechResourceType.ToString()}]");
                     continue;
                 }
 
-                logger.Debug("Building column header index...");
+                 vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug("Building column header index...");
                 for (var colIndex = 1; colIndex <= sheet.Dimension.Columns; ++colIndex)
                 {
                     var cellValue = sheet.Cells[1, colIndex].Value?.ToString();
@@ -83,13 +83,13 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
 
                 if (columnHeaderIndex.Count != columnHeaders.Count)
                 {
-                    logger.Debug(
+                     vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug(
                         "Failed to find all required column headers in store item definition file. Missing column headers are \r\n" +
                         $"{string.Join("\r\n", columnHeaders.Where(s => !columnHeaderIndex.Keys.Contains(s)))}");
                     return storeItems;
                 }
 
-                logger.Debug("Column header index built.");
+                 vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug("Column header index built.");
 
                 StoreItem storeItem;
 
@@ -108,7 +108,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                     var availability = sheet.Cells[rowIndex, columnHeaderIndex[szAvailability]].Value?.ToString();
                     if (string.IsNullOrEmpty(availability) || availability == szNa)
                     {
-                        logger.Debug(
+                         vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug(
                             $"Row [{rowIndex}] - Id [{id ?? "NULL"}] availability value [{availability ?? "NULL"}] is invalid. Skipping...");
                         continue;
                     }
@@ -170,13 +170,13 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         }
                     }
 
-                    logger.Debug($"Adding store item [{JsonConvert.SerializeObject(storeItem)}]");
+                     vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug($"Adding store item [{JsonConvert.SerializeObject(storeItem)}]");
                     storeItem.Type = battleTechResourceType;
                     storeItems.Add(storeItem);
                 }
             }
 
-            logger.Debug($"Store item definitions from [{sourceExcelFilePath}] loaded. Count = [{storeItems.Count}]");
+             vfBattleTechMod_Core.Utils.Loggers.NonSillyLogging.LogDebug($"Store item definitions from [{sourceExcelFilePath}] loaded. Count = [{storeItems.Count}]");
 
             return storeItems;
         }

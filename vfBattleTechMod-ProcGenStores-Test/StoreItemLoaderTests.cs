@@ -19,7 +19,7 @@ namespace vfBattleTechMod_ProcGenStores_Test
             var procGenSettings = settings["Procedurally Generate Store Contents"]
                 .ToObject<ProcGenStoreContentFeatureSettings>();
             var storeItems = StoreItemLoader.LoadStoreItemsFromExcel(sourceFile, procGenSettings.RarityBrackets,
-                ProcGenStoreContentFeature.BattleTechStoreResourceTypes, new log4NetLogger("vf-test"));
+                ProcGenStoreContentFeature.BattleTechStoreResourceTypes);
         }
     }
 }
