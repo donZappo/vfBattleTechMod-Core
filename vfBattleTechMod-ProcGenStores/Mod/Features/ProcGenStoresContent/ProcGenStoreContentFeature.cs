@@ -65,7 +65,10 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
             {
                 Myself.StoreItemService = new StoreItemService(Myself.Settings.StoreItemSourceFile, Myself.Settings.RarityBrackets, BattleTechStoreResourceTypes, Logger);
             }
-            
+
+            if (__instance.ThisShopType == Shop.ShopType.Faction)
+                return true;
+
             var simGameState = UnityGameInstance.BattleTechGame.Simulation;
             var shopType = __instance.ThisShopType;
             var starSystemName = ___system.Name;
