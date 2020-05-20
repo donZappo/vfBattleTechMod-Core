@@ -184,7 +184,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 if (item.Type == BattleTechResourceType.WeaponDef)
                     weaponDefList.Add(item);
             }
-
+            
             ammoBoxDefList.Shuffle();
             heatSinkDefList.Shuffle();
             jumpJetDefList.Shuffle();

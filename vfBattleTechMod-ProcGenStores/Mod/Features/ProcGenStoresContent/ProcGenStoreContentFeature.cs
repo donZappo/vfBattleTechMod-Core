@@ -107,6 +107,18 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
                         item.Quantity == -1, false, 0);
                 }).ToList();
 
+            int j = 0;
+            foreach (var item in shopDefItems)
+            {
+                if (item.Type == ShopItemType.Mech && j == 0)
+                {
+                    item.Count = 1;
+                    j++;
+                }
+                else if (item.Type == ShopItemType.Mech)
+                    item.Type = ShopItemType.MechPart;
+            }
+
             Logger.Debug($"ShopDefItems = [\r\n{JsonConvert.SerializeObject(shopDefItems, Formatting.Indented)}]");
 
             var result = new ItemCollectionResult
