@@ -13,6 +13,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
         public int MechStoreLimit { get; set; } = 5;
         public int UpgradeStoreLimit { get; set; } = 5;
         public int WeaponStoreLimit { get; set; } = 5;
+        public static double FullMechChance { get; set; } = 0.1;
         public Dictionary<string, int> StoreSizeModifiers { get; set; } = new Dictionary<string, int>();
 
         public bool CascadeRollsOnFail { get; set; } = true;

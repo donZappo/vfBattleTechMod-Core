@@ -107,14 +107,13 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
                         item.Quantity == -1, false, 0);
                 }).ToList();
 
-            int j = 0;
+            var rand = new System.Random();
+            double upgradeChance = 0; 
             foreach (var item in shopDefItems)
             {
-                if (item.Type == ShopItemType.Mech && j == 0)
-                {
+                upgradeChance = rand.NextDouble();
+                if (item.Type == ShopItemType.Mech && upgradeChance < ProcGenStoreContentFeatureSettings.FullMechChance)
                     item.Count = 1;
-                    j++;
-                }
                 else if (item.Type == ShopItemType.Mech)
                     item.Type = ShopItemType.MechPart;
             }
