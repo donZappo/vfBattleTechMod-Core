@@ -111,6 +111,9 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
             double upgradeChance = 0; 
             foreach (var item in shopDefItems)
             {
+                if (item.Count < 1)
+                    item.Count = 1;
+
                 upgradeChance = rand.NextDouble();
                 if (item.Type == ShopItemType.Mech && upgradeChance < ProcGenStoreContentFeatureSettings.FullMechChance)
                     item.Count = 1;
