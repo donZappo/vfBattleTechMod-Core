@@ -75,9 +75,10 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 {
                     var addedToStore = false;
                     var bracketModifier = -potentialItem.BracketBonus + rarityBracketBonus;
+                    _logger.Debug($"Rolling for item [{potentialItem.StoreItem.Id}], original bracket = [{potentialItem.StoreItem.RarityBracket.Order}] + " + bracketModifier);
                     var validRarityBrackets = settings.RarityBrackets
                         .Where(bracket =>
-                            bracket.Order >= potentialItem.StoreItem.RarityBracket.Order + bracketModifier)
+                            bracket.Order >= potentialItem.StoreItem.RarityBracket.Order)
                         .ToList()
                         .OrderBy(bracket => bracket.Order).ToList();
                     _logger.Debug(
@@ -152,7 +153,79 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                     _logger.Debug(
                         $"[{potentialItem.StoreItem.Id}] - [{(addedToStore ? "added to store" : "not added to store")}.]");
                 });
-            return inventoryItems;
+
+            //Parsing the items in order to apply shop limits for items.
+            var ammoBoxDefList = new List<ProcGenStoreItem>();
+            var heatSinkDefList = new List<ProcGenStoreItem>();
+            var jumpJetDefList = new List<ProcGenStoreItem>();
+            var mechDefList = new List<ProcGenStoreItem>();
+            var upgradeDefList = new List<ProcGenStoreItem>();
+            var weaponDefList = new List<ProcGenStoreItem>();
+            var finalInventoryItems = new List<ProcGenStoreItem>();
+
+            foreach (var item in inventoryItems)
+            {
+                if (item.RarityBracket.Order == -1)
+                {
+                    finalInventoryItems.Add(item);
+                    continue;
+                }
+
+                if (item.Type == BattleTechResourceType.AmmunitionBoxDef)
+                    ammoBoxDefList.Add(item);
+                if (item.Type == BattleTechResourceType.HeatSinkDef)
+                    heatSinkDefList.Add(item);
+                if (item.Type == BattleTechResourceType.JumpJetDef)
+                    jumpJetDefList.Add(item);
+                if (item.Type == BattleTechResourceType.MechDef)
+                    mechDefList.Add(item);
+                if (item.Type == BattleTechResourceType.UpgradeDef)
+                    upgradeDefList.Add(item);
+                if (item.Type == BattleTechResourceType.WeaponDef)
+                    weaponDefList.Add(item);
+            }
+
+            ammoBoxDefList.Shuffle();
+            heatSinkDefList.Shuffle();
+            jumpJetDefList.Shuffle();
+            mechDefList.Shuffle();
+            upgradeDefList.Shuffle();
+            weaponDefList.Shuffle();
+
+            var systemTags = UnityGameInstance.BattleTechGame.Simulation.CurSystem.Tags;
+
+            int totalModifier = 0;
+            foreach (var tag in systemTags)
+            {
+                if (settings.StoreSizeModifiers.ContainsKey(tag))
+                    totalModifier += settings.StoreSizeModifiers[tag];
+            }
+
+            int ammoCount = Math.Max(0, settings.AmmoStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(ammoCount, ammoBoxDefList.Count()); j++)
+                finalInventoryItems.Add(ammoBoxDefList[j]);
+
+            int heatSinkCount = Math.Max(0, settings.HeatSinkStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(heatSinkCount, heatSinkDefList.Count()); j++)
+                finalInventoryItems.Add(heatSinkDefList[j]);
+
+            int jumpJetCount = Math.Max(0, settings.JumpJetStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(jumpJetCount, jumpJetDefList.Count()); j++)
+                finalInventoryItems.Add(jumpJetDefList[j]);
+
+            int mechDefCount = Math.Max(0, settings.MechStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(mechDefCount, mechDefList.Count()); j++)
+                finalInventoryItems.Add(mechDefList[j]);
+
+            int upgradeDefCount = Math.Max(0, settings.UpgradeStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(upgradeDefCount, upgradeDefList.Count()); j++)
+                finalInventoryItems.Add(upgradeDefList[j]);
+
+            int weaponDefCount = Math.Max(0, settings.WeaponStoreLimit + totalModifier);
+            for (int j = 0; j < Math.Min(weaponDefCount, weaponDefList.Count()); j++)
+                finalInventoryItems.Add(weaponDefList[j]);
+
+            return finalInventoryItems;
         }
 
         public List<(ProcGenStoreItem StoreItem, int BracketBonus)> IdentifyPotentialInventoryItems(Shop.ShopType shopType,

@@ -76,13 +76,15 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             storeResourceTypes.ForEach(type => storeItemsByType[type] = new List<ProcGenStoreItem>());
             var rarityMap = new List<(int min, int max, string bracket)>
             {
-                (0, 1, "Common"),
-                (1, 2, "Uncommon"),
-                (2, 3, "VeryUncommon"),
-                (3, 4, "Rare"),
-                (4, 5, "VeryRare"),
-                (5, 6, "PracticallyExtinct"),
-                (6, int.MaxValue, "Extinct")
+                (-1, 1, "Ubiquitous"),
+                (1, 2, "VeryCommon"),
+                (2, 3, "Common"),
+                (3, 4, "Uncommon"),
+                (4, 5, "VeryUncommon"),
+                (5, 6, "Rare"),
+                (6, 7, "VeryRare"),
+                (7, 8, "PracticallyExtinct"),
+                (8, int.MaxValue, "Extinct")
             };
             rarityMap.Reverse();
 

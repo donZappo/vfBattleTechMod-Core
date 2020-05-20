@@ -7,6 +7,14 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
     {
         public string StoreItemSourceFile { get; set; } = string.Empty;
 
+        public int AmmoStoreLimit { get; set; } = 5;
+        public int HeatSinkStoreLimit { get; set; } = 5;
+        public int JumpJetStoreLimit { get; set; } = 5;
+        public int MechStoreLimit { get; set; } = 5;
+        public int UpgradeStoreLimit { get; set; } = 5;
+        public int WeaponStoreLimit { get; set; } = 5;
+        public Dictionary<string, int> StoreSizeModifiers { get; set; } = new Dictionary<string, int>();
+
         public bool CascadeRollsOnFail { get; set; } = true;
 
         public bool UseAdditiveForModifiers { get; set; } = true;
