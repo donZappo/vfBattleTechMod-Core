@@ -164,15 +164,29 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             {
                 void DumpItemsToSheet(ExcelWorkbook excelWorkbook, string sheetName, List<string> list, List<ProcGenStoreItem> items)
                 {
+                    
+
+
                     var row = 2;
                     var col = 1;
                     var sheet = excelWorkbook.Worksheets.Add(sheetName);
                     list.ForEach(s => sheet.Cells[1, col++].Value = s);
                     items.ForEach(item =>
                     {
+                        var requiredTagsSet = "";
+                        foreach (var foo in item.RequiredTags)
+                            requiredTagsSet = requiredTagsSet + "| " + foo;
+
+                        var restrictedTagsSet = "";
+                        foreach (var foo in item.RestrictedTags)
+                            restrictedTagsSet = restrictedTagsSet + "| " + foo;
+
                         sheet.Cells[row, 1].Value = item.Id;
                         sheet.Cells[row, 2].Value = item.Purchasable;
-                        sheet.Cells[row, 3].Value = item.MinAppearanceDate.ToString();
+                        sheet.Cells[row, 3].Value = item.RarityBracket.Order;
+                        sheet.Cells[row, 4].Value = item.MinAppearanceDate.ToString();
+                        sheet.Cells[row, 5].Value = requiredTagsSet;
+                        sheet.Cells[row, 6].Value = restrictedTagsSet;
                         row += 1;
                     });
                 }
@@ -182,21 +196,21 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 {
                     fileInfo.Delete();
                 }
-                
+
                 var excelPackage = new ExcelPackage(fileInfo);
                 var book = excelPackage.Workbook;
                 var columns = new List<string>()
                 {
-                    "Id", "Purchasable", "Appearance Date"
+                    "Id", "Purchasable", "Rarity", "Appearance Date", "Req. Tags", "Ex. Tags"
                 };
-                
+
                 storeItemsByType.Keys.ForEach(type =>
                 {
                     var items = storeItemsByType[type];
                     var sheetName = type.ToString();
                     DumpItemsToSheet(book, sheetName, columns, items);
                 });
-                
+
                 DumpItemsToSheet(book, "Mechs w/o date", columns, mechsSansAppearanceDates);
                 excelPackage.Save();
             }
@@ -204,6 +218,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             {
                 logger.Error($"Exception logging data manager items.", ex);
             }
+
 
             return storeItemsByType;
         }
