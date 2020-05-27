@@ -10,7 +10,7 @@ namespace vfBattleTechMod_Core.Helpers
             logger.Debug($"Calculating appearance date factor...");
             var uncompressedDaysDifference = Convert.ToDouble(factorControlDate.Subtract(gameStartDate).Days);
             logger.Debug($"Uncompressed days difference = [{uncompressedDaysDifference}]...");
-            var compressedDaysDifference = Convert.ToDouble(factorTargetDate.Subtract(gameStartDate).Days);
+            var compressedDaysDifference = Convert.ToDouble(gameStartDate.Subtract(factorTargetDate).Days);
             logger.Debug($"Compressed days difference = [{compressedDaysDifference}]...");
             var compressionPercentage = uncompressedDaysDifference / compressedDaysDifference;
             logger.Debug($"returning Compression percentage = [{compressionPercentage}]...");
@@ -23,13 +23,13 @@ namespace vfBattleTechMod_Core.Helpers
             logger.Trace($"Calculating compressed appearance date for game start date = [{gameStartDate}], appearance date = [{appearanceDate}], using factor = [{compressionFactor}]...");
             if (appearanceDate <= gameStartDate)
             {
-                logger.Trace($"Appearance date [{appearanceDate}] > Game Start Date = [{gameStartDate}], return raw appearance date.");
+                logger.Trace($"Appearance date [{appearanceDate}] < Game Start Date = [{gameStartDate}], return raw appearance date.");
                 return appearanceDate;
             }
 
             var actualDaysUntilAppearance = appearanceDate.Subtract(gameStartDate).Days;
             logger.Trace($"Actual days until appearance = [{actualDaysUntilAppearance}]...");
-            var compressedDaysUntilAppearance = actualDaysUntilAppearance / compressionFactor;
+            var compressedDaysUntilAppearance = actualDaysUntilAppearance * compressionFactor;
             logger.Trace($"Compressed days until appearance = [{compressedDaysUntilAppearance}]...");
             var compressedAppearanceDate = gameStartDate.AddDays(compressedDaysUntilAppearance);
             logger.Trace($"Returning Compressed appearance date = [{compressedAppearanceDate}].");

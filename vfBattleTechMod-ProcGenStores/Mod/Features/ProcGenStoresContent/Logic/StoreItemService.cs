@@ -36,7 +36,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 planetTagModifiers, potentialInventoryItems);
             _logger.Debug(
                 $"Final Inventory Items = \r\n{string.Join("\r\n", storeInventory.Select(item => $"{item.Id} @ {item.Quantity} units"))}");
-
+            
             return storeInventory;
         }
 
@@ -74,11 +74,18 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 potentialItem =>
                 {
                     var addedToStore = false;
-                    var bracketModifier = -potentialItem.BracketBonus + rarityBracketBonus;
+                    var bracketModifier = 0;
+                    int minimumBracket = -1;
+                    if (potentialItem.StoreItem.RarityBracket.Order > 0)
+                    {
+                        bracketModifier = -potentialItem.BracketBonus + rarityBracketBonus;
+                        minimumBracket = 1;
+                    }
+
                     _logger.Debug($"Rolling for item [{potentialItem.StoreItem.Id}], original bracket = [{potentialItem.StoreItem.RarityBracket.Order}] + " + bracketModifier);
                     var validRarityBrackets = settings.RarityBrackets
                         .Where(bracket =>
-                            bracket.Order >= potentialItem.StoreItem.RarityBracket.Order)
+                            bracket.Order >= Math.Max(potentialItem.StoreItem.RarityBracket.Order + bracketModifier, minimumBracket))
                         .ToList()
                         .OrderBy(bracket => bracket.Order).ToList();
                     _logger.Debug(
@@ -233,6 +240,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             List<string> planetTags,
             DateTime currentDate, ProcGenStoreContentFeatureSettings settings)
         {
+
             if (_storeItems == null)
             {
                 try
@@ -254,7 +262,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                     _storeItems.Values.SelectMany(list => list).ToList().ForEach(
                         item =>
                         {
-                            var result = item.IsValidForAppearance(currentDate, ownerName, shopType, planetTags, settings);
+                            var result = item.IsValidForAppearance(currentDate, ownerName, shopType, planetTags, item.TagSet, settings);
                             _logger.Debug($"[{item.Id}] - [{result.ToString()}]");
                             if (result.result)
                             {

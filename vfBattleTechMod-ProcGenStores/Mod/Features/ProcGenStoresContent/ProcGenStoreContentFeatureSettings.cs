@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using vfBattleTechMod_Core.Mods.BaseImpl;
+using System;
 
 namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
 {
@@ -15,6 +16,9 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
         public int WeaponStoreLimit { get; set; } = 5;
         public static double FullMechChance { get; set; } = 0.1;
         public static bool AuditStores { get; set; } = false;
+        public static bool EquipmentAppearanceByMechs { get; set; } = false;
+        public static DateTime ItemAppearanceDate { get; set; } = new DateTime(3025, 1, 1);
+        public static DateTime CareerEndDate { get; set; } = new DateTime(3038, 1, 1);
         public Dictionary<string, int> StoreSizeModifiers { get; set; } = new Dictionary<string, int>();
 
         public bool CascadeRollsOnFail { get; set; } = true;

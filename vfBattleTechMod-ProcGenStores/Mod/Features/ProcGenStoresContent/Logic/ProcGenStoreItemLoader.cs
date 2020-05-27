@@ -240,26 +240,33 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             }
             else
             {
-                if (o is MechComponentDef component)
+                if (ProcGenStoreContentFeatureSettings.EquipmentAppearanceByMechs)
                 {
-                    var id = component.Description.Id;
-                    logger.Trace($"Attempting to mine first appearance of [{id}] on any mech...");
-                    var hostingMechs = mechDefs.Where(def =>
-                        {
-                            logger.Trace($"Evaluating mech [{def.Description.Id}]...");
-                            if (!def.MinAppearanceDate.HasValue)
+                    if (o is MechComponentDef component)
+                    {
+                        var id = component.Description.Id;
+                        logger.Trace($"Attempting to mine first appearance of [{id}] on any mech...");
+                        var hostingMechs = mechDefs.Where(def =>
                             {
-                                logger.Trace($"Mech [{def.Description.Id}] has no appearance date, skipping...");
-                                return false;
-                            }
-                            return def.Inventory.Any(inventoryRef =>
-                            {
-                                return inventoryRef.ComponentDefID == id;
-                            });
-                        }).OrderBy(def => def.MinAppearanceDate);
-                    var earliestMech = hostingMechs.FirstOrDefault();
-                    appearanceDate = earliestMech?.MinAppearanceDate;
-                    logger.Trace($"Component [{id}] first appears [{appearanceDate.ToString()}] on mech [{earliestMech?.Description?.Id ?? "N/A"}].");
+                                logger.Trace($"Evaluating mech [{def.Description.Id}]...");
+                                if (!def.MinAppearanceDate.HasValue)
+                                {
+                                    logger.Trace($"Mech [{def.Description.Id}] has no appearance date, skipping...");
+                                    return false;
+                                }
+                                return def.Inventory.Any(inventoryRef =>
+                                {
+                                    return inventoryRef.ComponentDefID == id;
+                                });
+                            }).OrderBy(def => def.MinAppearanceDate);
+                        var earliestMech = hostingMechs.FirstOrDefault();
+                        appearanceDate = earliestMech?.MinAppearanceDate;
+                        logger.Trace($"Component [{id}] first appears [{appearanceDate.ToString()}] on mech [{earliestMech?.Description?.Id ?? "N/A"}].");
+                    }
+                }
+                else
+                {
+                    appearanceDate = ProcGenStoreContentFeatureSettings.ItemAppearanceDate;
                 }
             }
 
