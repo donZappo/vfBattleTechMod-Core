@@ -181,9 +181,19 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         foreach (var foo in item.RestrictedTags)
                             restrictedTagsSet = restrictedTagsSet + "| " + foo;
 
+                        var rarityTag = "N/A";
+                        if (item.TagSet.Contains("TechLevel_LowTech"))
+                            rarityTag = "L";
+                        if (item.TagSet.Contains("TechLevel_MidTech"))
+                            rarityTag = "M";
+                        if (item.TagSet.Contains("TechLevel_HighTech"))
+                            rarityTag = "H";
+
+
                         sheet.Cells[row, 1].Value = item.Id;
                         sheet.Cells[row, 2].Value = item.Purchasable;
                         sheet.Cells[row, 3].Value = item.RarityBracket.Order;
+                        sheet.Cells[row, 4].Value = rarityTag;
                         sheet.Cells[row, 4].Value = item.MinAppearanceDate.ToString();
                         sheet.Cells[row, 5].Value = requiredTagsSet;
                         sheet.Cells[row, 6].Value = restrictedTagsSet;
@@ -201,7 +211,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 var book = excelPackage.Workbook;
                 var columns = new List<string>()
                 {
-                    "Id", "Purchasable", "Rarity", "Appearance Date", "Req. Tags", "Ex. Tags"
+                    "Id", "Purchasable", "Rarity", "T. Level", "Appearance Date", "Req. Tags", "Ex. Tags"
                 };
 
                 storeItemsByType.Keys.ForEach(type =>
