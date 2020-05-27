@@ -194,9 +194,9 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         sheet.Cells[row, 2].Value = item.Purchasable;
                         sheet.Cells[row, 3].Value = item.RarityBracket.Order;
                         sheet.Cells[row, 4].Value = rarityTag;
-                        sheet.Cells[row, 4].Value = item.MinAppearanceDate.ToString();
-                        sheet.Cells[row, 5].Value = requiredTagsSet;
-                        sheet.Cells[row, 6].Value = restrictedTagsSet;
+                        sheet.Cells[row, 5].Value = item.MinAppearanceDate.ToString();
+                        sheet.Cells[row, 6].Value = requiredTagsSet;
+                        sheet.Cells[row, 7].Value = restrictedTagsSet;
                         row += 1;
                     });
                 }

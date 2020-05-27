@@ -73,7 +73,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             if (itemTags.Contains("TechLevel_LowTech"))
             {
                 var days = (double)sim.CurrentDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
-                var totalDays = (double)ProcGenStoreContentFeatureSettings.CareerEndDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
+                var totalDays = ProcGenStoreContentFeatureSettings.CareerDays;
                 int rarityBonus = Math.Min((int) (7 * Math.Round(days / totalDays)), 7);
                 return (true, rarityBonus);
             }
@@ -81,7 +81,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             if (itemTags.Contains("TechLevel_MidTech"))
             {
                 var days = (double)sim.CurrentDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
-                var totalDays = (double)ProcGenStoreContentFeatureSettings.CareerEndDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
+                var totalDays = ProcGenStoreContentFeatureSettings.CareerDays;
                 int rarityBonus = Math.Min((int)(6 * Math.Round(days / totalDays)), 6);
                 return (true, rarityBonus);
             }
@@ -89,7 +89,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             if (itemTags.Contains("TechLevel_HighTech"))
             {
                 var days = (double)sim.CurrentDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
-                var totalDays = (double)ProcGenStoreContentFeatureSettings.CareerEndDate.Subtract(sim.GetCampaignStartDate()).Days + 1;
+                var totalDays = ProcGenStoreContentFeatureSettings.CareerDays;
                 int rarityBonus = Math.Min((int)(5 * Math.Round(days / totalDays)), 5);
                 return (true, rarityBonus);
             }
