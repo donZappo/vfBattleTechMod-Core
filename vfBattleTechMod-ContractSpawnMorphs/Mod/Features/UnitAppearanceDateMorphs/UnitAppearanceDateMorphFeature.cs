@@ -93,7 +93,7 @@ namespace vfBattleTechMod_ContractSpawnMorphs.Mod.Features.UnitAppearanceDateMor
                     var appearanceDate = mechDef.MinAppearanceDate;
                     var newAppearanceDate =
                         AppearanceUtils.CalculateCompressedAppearanceDate(__instance.GetCampaignStartDate(),
-                            appearanceDate.Value, appearanceFactor, Logger);
+                            appearanceDate.Value, appearanceFactor, Myself.Settings.UseTimeAccelerationFactor, Myself.Settings.TimeAccelerationFactor, Logger);
                     Logger.Trace($"Setting appearance date for [{mechDef.Description.Id}] to [{newAppearanceDate}] from [{appearanceDate}]...");
                     // mechDef.MinAppearanceDate = newAppearanceDate;
                     var traverse = Traverse.Create(mechDef).Property("MinAppearanceDate");

@@ -8,9 +8,9 @@ namespace vfBattleTechMod_Core.Helpers
         public static double CalculateAppearanceDateFactor(DateTime gameStartDate, DateTime factorControlDate, DateTime factorTargetDate, ILogger logger)
         {
             logger.Debug($"Calculating appearance date factor...");
-            var uncompressedDaysDifference = Convert.ToDouble(factorControlDate.Subtract(gameStartDate).Days);
+            var uncompressedDaysDifference = Convert.ToDouble(factorControlDate.Subtract(gameStartDate).Days + 1);
             logger.Debug($"Uncompressed days difference = [{uncompressedDaysDifference}]...");
-            var compressedDaysDifference = Convert.ToDouble(gameStartDate.Subtract(factorTargetDate).Days);
+            var compressedDaysDifference = Convert.ToDouble(gameStartDate.Subtract(factorTargetDate).Days + 1);
             logger.Debug($"Compressed days difference = [{compressedDaysDifference}]...");
             var compressionPercentage = uncompressedDaysDifference / compressedDaysDifference;
             logger.Debug($"returning Compression percentage = [{compressionPercentage}]...");
@@ -18,7 +18,7 @@ namespace vfBattleTechMod_Core.Helpers
         }
 
         public static DateTime CalculateCompressedAppearanceDate(DateTime gameStartDate, DateTime appearanceDate,
-            double compressionFactor, ILogger logger)
+            double compressionFactor, bool useTimeAccFactor, double timeAccelerationFactor, ILogger logger)
         {
             logger.Trace($"Calculating compressed appearance date for game start date = [{gameStartDate}], appearance date = [{appearanceDate}], using factor = [{compressionFactor}]...");
             if (appearanceDate <= gameStartDate)
@@ -27,12 +27,15 @@ namespace vfBattleTechMod_Core.Helpers
                 return appearanceDate;
             }
 
+            if (useTimeAccFactor)
+                compressionFactor = 1 / timeAccelerationFactor;
+
             var actualDaysUntilAppearance = appearanceDate.Subtract(gameStartDate).Days;
-            logger.Trace($"Actual days until appearance = [{actualDaysUntilAppearance}]...");
+            logger.Debug($"Actual days until appearance = [{actualDaysUntilAppearance}]...");
             var compressedDaysUntilAppearance = actualDaysUntilAppearance * compressionFactor;
-            logger.Trace($"Compressed days until appearance = [{compressedDaysUntilAppearance}]...");
+            logger.Debug($"Compressed days until appearance = [{compressedDaysUntilAppearance}]...");
             var compressedAppearanceDate = gameStartDate.AddDays(compressedDaysUntilAppearance);
-            logger.Trace($"Returning Compressed appearance date = [{compressedAppearanceDate}].");
+            logger.Debug($"Returning Compressed appearance date = [{compressedAppearanceDate}].");
             return compressedAppearanceDate;
         }
     }

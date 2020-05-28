@@ -17,7 +17,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent
         public static double FullMechChance { get; set; } = 0.1;
         public static bool AuditStores { get; set; } = false;
         public static bool EquipmentAppearanceByMechs { get; set; } = false;
-        public static DateTime ItemAppearanceDate { get; set; } = new DateTime(3028, 4, 28); // Helm Memory Core Recovery
+        public static DateTime ItemAppearanceDate { get; set; } = new DateTime(3025, 1, 1); // Helm Memory Core Recovery
         public static double CareerDays { get; set; } = 1200;
         public Dictionary<string, int> StoreSizeModifiers { get; set; } = new Dictionary<string, int>();
 
