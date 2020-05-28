@@ -1,5 +1,6 @@
 ﻿using System;
 using vfBattleTechMod_Core.Utils.Interfaces;
+using BattleTech;
 
 namespace vfBattleTechMod_Core.Helpers
 {
@@ -28,7 +29,11 @@ namespace vfBattleTechMod_Core.Helpers
             }
 
             if (useTimeAccFactor)
-                compressionFactor = 1 / timeAccelerationFactor;
+            {
+                var sim = UnityGameInstance.BattleTechGame.Simulation;
+                compressionFactor = ((double) sim.Constants.CareerMode.GameLength) / 12600;
+
+            }
 
             var actualDaysUntilAppearance = appearanceDate.Subtract(gameStartDate).Days;
             logger.Debug($"Actual days until appearance = [{actualDaysUntilAppearance}]...");
