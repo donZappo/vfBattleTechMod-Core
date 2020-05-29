@@ -10,7 +10,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
     {
         public ProcGenStoreItem(BattleTechResourceType type, string id, DateTime? appearanceDate, TagSet tagSet,
             ProcGenStoreContentFeatureSettings.RarityBracket rarityBracket, List<string> requiredTags,
-            List<string> restrictedTags, bool descriptionPurchasable)
+            List<string> restrictedTags, bool descriptionPurchasable, int purchaseCost, int chassisCost)
         {
             Type = type;
             Id = id;
@@ -20,6 +20,8 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
             RequiredTags = requiredTags;
             RestrictedTags = restrictedTags;
             Purchasable = descriptionPurchasable;
+            PurchaseCost = purchaseCost;
+            ChassisCost = chassisCost;
         }
 
         public BattleTechResourceType Type { get; set; }
@@ -33,6 +35,8 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
         public DateTime? MinAppearanceDate { get; set; }
         public int Quantity { get; set; }
         public bool Purchasable { get; set; }
+        public int PurchaseCost { get; set; }
+        public int ChassisCost { get; set; }
 
         public (bool result, int bracketBonus) IsValidForAppearance(DateTime currentDate, string ownerValueName,
             Shop.ShopType shopType,

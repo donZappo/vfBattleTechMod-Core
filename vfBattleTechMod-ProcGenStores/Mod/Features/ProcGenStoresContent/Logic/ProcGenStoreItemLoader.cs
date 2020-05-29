@@ -30,6 +30,20 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                     throw new InvalidProgramException($"BattleTechResourceType [{type.ToString()}] unhandled.");
             }
         }
+        static int GetChassisCost(BattleTechResourceType type, object theObject)
+        {
+            switch (type)
+            {
+                case BattleTechResourceType.AmmunitionBoxDef: return 0;
+                case BattleTechResourceType.UpgradeDef: return 0;
+                case BattleTechResourceType.HeatSinkDef: return 0;
+                case BattleTechResourceType.JumpJetDef: return 0;
+                case BattleTechResourceType.WeaponDef: return 0;
+                case BattleTechResourceType.MechDef: return ((MechDef)theObject).Chassis.Description.Cost;
+                default:
+                    throw new InvalidProgramException($"BattleTechResourceType [{type.ToString()}] unhandled.");
+            }
+        }
 
         static DescriptionDef GetObjectDescriptionByType(BattleTechResourceType type, object theObject)
         {
@@ -116,6 +130,9 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         var mappedRarity =
                             rarityMap.First(tuple => definedRarity < tuple.max && definedRarity >= tuple.min);
                         var tagSet = GetTagsByType(storeResourceType, o);
+                        var purchaseCost = description.Cost;
+                        int chassiscost = 0;
+                        chassiscost = GetChassisCost(storeResourceType, o);
 
                         var containingShopDefinitions = simGame.DataManager.Shops
                             .Select(pair => pair.Value)
@@ -146,7 +163,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
 
                         return new ProcGenStoreItem(storeResourceType, description.Id, appearanceDate, tagSet,
                             rarityBrackets.First(bracket => bracket.Name == mappedRarity.bracket), requiredTags,
-                            exclusionTags, description.Purchasable);
+                            exclusionTags, description.Purchasable, purchaseCost, chassiscost);
                     }
                 ).ToList();
                 storeItemsByType[storeResourceType].AddRange(itemDetails);
@@ -189,6 +206,12 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         if (item.TagSet.Contains("TechLevel_HighTech"))
                             rarityTag = "H";
 
+                        string blacklisted = "";
+                        if (item.TagSet.Contains("BLACKLISTED"))
+                            blacklisted = "BLACKLISTED";
+                        string builtin = "";
+                        if (item.TagSet.Contains("BUILT-IN"))
+                            builtin = "BUILT-IN";
 
                         sheet.Cells[row, 1].Value = item.Id;
                         sheet.Cells[row, 2].Value = item.Purchasable;
@@ -197,6 +220,10 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                         sheet.Cells[row, 5].Value = item.MinAppearanceDate.ToString();
                         sheet.Cells[row, 6].Value = requiredTagsSet;
                         sheet.Cells[row, 7].Value = restrictedTagsSet;
+                        sheet.Cells[row, 8].Value = blacklisted;
+                        sheet.Cells[row, 9].Value = builtin;
+                        sheet.Cells[row, 10].Value = item.PurchaseCost;
+                        sheet.Cells[row, 11].Value = item.ChassisCost;
                         row += 1;
                     });
                 }
@@ -211,7 +238,7 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                 var book = excelPackage.Workbook;
                 var columns = new List<string>()
                 {
-                    "Id", "Purchasable", "Rarity", "T. Level", "Appearance Date", "Req. Tags", "Ex. Tags"
+                    "Id", "Purchasable", "Rarity", "T. Level", "Appearance Date", "Req. Tags", "Ex. Tags, Blacklisted, Built-In, Purchase Cost, Chassis Cost"
                 };
 
                 storeItemsByType.Keys.ForEach(type =>
