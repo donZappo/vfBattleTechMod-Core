@@ -121,6 +121,8 @@ namespace vfBattleTechMod_ProcGenStores.Mod.Features.ProcGenStoresContent.Logic
                             var quantityRoll = random.Next(effectiveQuantityBracket.LowCount,
                                 effectiveQuantityBracket.HighCount + 1);
                             storeItem.Quantity = effectiveQuantityBracket.LowCount < 0 ? -1 : quantityRoll;
+                            
+                            if (storeItem.Quantity != -1)
                             planetTagModifiers.ForEach(modifier =>
                                 storeItem.Quantity =
                                     Convert.ToInt32(Math.Round(
